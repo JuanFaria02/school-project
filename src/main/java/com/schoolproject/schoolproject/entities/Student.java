@@ -1,14 +1,24 @@
 package com.schoolproject.schoolproject.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
+
 import java.util.Objects;
 
+import org.hibernate.annotations.ManyToAny;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -22,21 +32,33 @@ public class Student implements Serializable{
 	private Long id;
 	private String name;
 	private String cpf;
-	private Date birthDate;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
+	private Instant birthDate;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT")
+	private Instant startDate; 
 	private String phone;
 	private String city;
+	
+	@Autowired
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_class")
+	@JsonIgnore
+	private SchoolClass schoolClass;
 	
 	public Student() {
 		
 	}
 	
-	public Student(Long id, String name, String cpf, Date birthDate, String phone, String city) {
+	public Student(Long id, String name, String cpf, Instant birthDate, Instant startDate,  String phone, String city) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
 		this.phone = phone;
 		this.city = city;
+		this.startDate = startDate;
 	}
 
 	public Long getId() {
@@ -63,11 +85,11 @@ public class Student implements Serializable{
 		this.cpf = cpf;
 	}
 
-	public Date getBirthDate() {
+	public Instant getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(Instant birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -85,6 +107,24 @@ public class Student implements Serializable{
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	
+	public Instant getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Instant startDate) {
+		this.startDate = startDate;
+	}
+	
+
+	public SchoolClass getSchoolClass() {
+		return schoolClass;
+	}
+
+	public void setSchoolClass(SchoolClass schoolClass) {
+		this.schoolClass = schoolClass;
 	}
 
 	@Override
@@ -106,9 +146,11 @@ public class Student implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", cpf=" + cpf + ", birthDate=" + birthDate + ", phone=" + phone
-				+ ", city=" + city + "]";
+		return "Student [id=" + id + ", name=" + name + ", cpf=" + cpf + ", birthDate=" + birthDate + ", startDate="
+				+ startDate + ", phone=" + phone + ", city=" + city + "]";
 	}
+
+	
 	
 	
 }
