@@ -1,79 +1,63 @@
 package com.schoolproject.schoolproject.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_shcool_class")
-public class SchoolClass implements Serializable{
-
-
+@Table(name = "tb_subject")
+public class Subject implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id; 
-	private String grade; 
-
-	
-	@OneToMany(mappedBy = "schoolClass")
-	private Set<Student> students = new HashSet<>();
+	private Long id;
+	private String name; 
 	
 	
-
-	public SchoolClass() {
+	
+	public Subject() {
 	}
 
-
-
-	public SchoolClass(Long id, String grade) {
-
+	public Subject(Long id, String name) {
 		this.id = id;
-		this.grade = grade;
+		this.name = name;
 	}
-
-
 
 	public Long getId() {
 		return id;
 	}
-
-
+	
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
-	public String getGrade() {
-		return grade;
+	public String getName() {
+		return name;
 	}
 
-
-
-	public void setGrade(String grade) {
-		this.grade = grade;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-
-
-	public Set<Student> getStudents() {
-		return students;
-	}
+	
+	
 
 
 
@@ -81,8 +65,6 @@ public class SchoolClass implements Serializable{
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -92,19 +74,14 @@ public class SchoolClass implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SchoolClass other = (SchoolClass) obj;
+		Subject other = (Subject) obj;
 		return Objects.equals(id, other.id);
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "SchoolClass [id=" + id + ", grade=" + grade + ", students=" + students + "]";
+		return "Subject [id=" + id + ", name=" + name + "]";
 	}
-
-
 	
 	
-
 }

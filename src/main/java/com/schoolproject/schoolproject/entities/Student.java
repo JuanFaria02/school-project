@@ -2,10 +2,10 @@ package com.schoolproject.schoolproject.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -41,11 +42,14 @@ public class Student implements Serializable{
 	private String phone;
 	private String city;
 	
-	@Autowired
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_class")
 	@JsonIgnore
 	private SchoolClass schoolClass;
+	
+	@OneToMany(mappedBy = "student")
+	private Set<ReportCard> reportCards = new HashSet<>();
 	
 	public Student() {
 		
@@ -119,6 +123,10 @@ public class Student implements Serializable{
 	}
 	
 
+	public Set<ReportCard> getReportCards() {
+		return reportCards;
+	}
+
 	public SchoolClass getSchoolClass() {
 		return schoolClass;
 	}
@@ -126,6 +134,9 @@ public class Student implements Serializable{
 	public void setSchoolClass(SchoolClass schoolClass) {
 		this.schoolClass = schoolClass;
 	}
+
+	
+
 
 	@Override
 	public int hashCode() {
@@ -150,7 +161,5 @@ public class Student implements Serializable{
 				+ startDate + ", phone=" + phone + ", city=" + city + "]";
 	}
 
-	
-	
 	
 }
