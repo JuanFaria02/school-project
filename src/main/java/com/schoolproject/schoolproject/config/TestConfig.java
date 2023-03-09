@@ -55,21 +55,11 @@ public class TestConfig implements CommandLineRunner{
 		student1.setSchoolClass(sc1);
 		student.setSchoolClass(sc1);
 		
-		
 
-		ReportCard rp = new ReportCard(null, "901", student);
-		ReportCard rp1 = new ReportCard(null, "901", student1);
-	
-		rp1.getNotes().put(s1, 9.2);
-		rp1.getNotes().put(s2, 9.9);
-		rp1.setMedia();
-		
-		rp.getNotes().put(s1, 8.2);
-		rp.getNotes().put(s2, 6.3);
-		rp.setMedia();
+		ReportCard rp = new ReportCard(null, "901", student, s1, 3.4);
+		ReportCard rp1 = new ReportCard(null, "901", student, s2, 8.5);
 		
 	
-		
 
 		
 		studentRepository.saveAll(Arrays.asList(student,student1));
