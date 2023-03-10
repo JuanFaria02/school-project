@@ -18,7 +18,7 @@ import com.schoolproject.schoolproject.services.StudentService;
 public class StudentResource {
 	
 	@Autowired
-	StudentService studentService;
+	private StudentService studentService;
 	
 	@GetMapping
 	public ResponseEntity<List<Student>> findAll() {

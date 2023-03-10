@@ -1,18 +1,20 @@
 package com.schoolproject.schoolproject.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
-
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -26,9 +28,12 @@ public class SchoolClass implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 	private String grade; 
-
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT")
+	private Instant moment;
 	
-	@OneToMany(mappedBy = "schoolClass")
+	@ManyToMany
+	@JoinTable(name = "tb_classes_students", joinColumns = @JoinColumn(name = "id_class"),
+	inverseJoinColumns = @JoinColumn(name = "id_student"))
 	private Set<Student> students = new HashSet<>();
 	
 	
@@ -38,10 +43,11 @@ public class SchoolClass implements Serializable{
 
 
 
-	public SchoolClass(Long id, String grade) {
+	public SchoolClass(Long id, String grade, Instant moment) {
 
 		this.id = id;
 		this.grade = grade;
+		this.moment = moment;
 	}
 
 
@@ -72,6 +78,18 @@ public class SchoolClass implements Serializable{
 
 	public Set<Student> getStudents() {
 		return students;
+	}
+
+
+
+	public Instant getMoment() {
+		return moment;
+	}
+
+
+
+	public void setMoment(Instant moment) {
+		this.moment = moment;
 	}
 
 

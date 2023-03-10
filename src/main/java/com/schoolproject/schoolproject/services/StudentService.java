@@ -12,7 +12,7 @@ import com.schoolproject.schoolproject.repositories.StudentRepository;
 @Service
 public class StudentService {
 	@Autowired
-	StudentRepository studentRepository;
+	private StudentRepository studentRepository;
 	public List<Student> findAll(){
 		return studentRepository.findAll();
 	}

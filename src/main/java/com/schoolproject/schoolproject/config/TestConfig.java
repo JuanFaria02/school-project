@@ -1,7 +1,7 @@
 package com.schoolproject.schoolproject.config;
 
 import java.time.Instant;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -10,14 +10,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.schoolproject.schoolproject.entities.Employee;
 import com.schoolproject.schoolproject.entities.ReportCard;
 import com.schoolproject.schoolproject.entities.SchoolClass;
 import com.schoolproject.schoolproject.entities.Student;
 import com.schoolproject.schoolproject.entities.Subject;
+import com.schoolproject.schoolproject.entities.Teacher;
+import com.schoolproject.schoolproject.repositories.EmployeeRepository;
 import com.schoolproject.schoolproject.repositories.ReportCardRepository;
 import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.repositories.SubjectRepository;
+import com.schoolproject.schoolproject.repositories.TeacherRepository;
 
 @Configuration
 @Profile("test")
@@ -29,9 +33,13 @@ public class TestConfig implements CommandLineRunner{
 	
 	@Autowired
 	private SubjectRepository subjectRepository;
+	@Autowired
+	private TeacherRepository teacherRepository;
 	
 	@Autowired
 	private ReportCardRepository reportCardRepository;
+	@Autowired
+	private EmployeeRepository employeeRepository;
 	@Override
 	public void run(String... args){
 
@@ -42,33 +50,37 @@ public class TestConfig implements CommandLineRunner{
 				Instant.now(), "21992314045", "São Gonçalo");
 		
 		
-		SchoolClass sc1 = new SchoolClass(null, "901");
+		SchoolClass sc1 = new SchoolClass(null, "901", Instant.now());
 		Student student1 = new Student(null, "José Silva",
 				"235501332", Instant.parse("2004-06-20T19:53:07Z"),
 				Instant.now(), "21992314045", "São Gonçalo");
-	
+		SchoolClass sc = new SchoolClass(null, "101", Instant.now());
+
 		Subject s1 = new Subject(null, "Math");
 		Subject s2 = new Subject(null, "Phisics");
 
 
-		
-		student1.setSchoolClass(sc1);
-		student.setSchoolClass(sc1);
-		
-
 		ReportCard rp = new ReportCard(null, "901", student, s1, 3.4);
 		ReportCard rp1 = new ReportCard(null, "901", student, s2, 8.5);
 		
-	
-
+		Employee employee = new Employee(null, "Maria Silva", 
+				"235500332", Instant.parse("2004-06-20T19:53:07Z"),
+				Instant.now(), "21992314045", "São Gonçalo");
 		
 		studentRepository.saveAll(Arrays.asList(student,student1));
 		schoolClassRepository.saveAll(Arrays.asList(sc1));
-
 		subjectRepository.saveAll(Arrays.asList(s1,s2));
-	
+		employeeRepository.saveAll(Arrays.asList(employee));
 		reportCardRepository.saveAll(Arrays.asList(rp, rp1));
-	
+		
+		sc1.getStudents().add(student1);
+		sc1.getStudents().add(student);
+		
+		schoolClassRepository.saveAll(Arrays.asList(sc1));
+		Teacher teacher = new Teacher(null, "124353355", employee);
+		employee.setTeacher(teacher);
+		employeeRepository.saveAll(Arrays.asList(employee));
+
 	}
 	
 }
