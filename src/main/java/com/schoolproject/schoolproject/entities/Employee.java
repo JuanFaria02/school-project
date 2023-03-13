@@ -5,36 +5,48 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "tb_employee", uniqueConstraints = {@UniqueConstraint(columnNames = {"cpf"})})
+@Table(name = "tb_employee", uniqueConstraints = {@UniqueConstraint(columnNames = {"cpf", "siape"})})
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("E")
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name; 
 	private String cpf;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
 	private Instant birthDate;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT")
 	private Instant startDate; 
 	private String phone;
 	private String city;
-	@OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
-	private Teacher teacher;
-
+    
+	@Column(insertable=false, updatable=false)
+	private String type;
+    
+    
+    
 	public Employee() {
 	}
-	public Employee(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city) {
+	public Employee(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city, String type) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
@@ -42,6 +54,7 @@ public class Employee {
 		this.startDate = startDate;
 		this.phone = phone;
 		this.city = city;
+		this.type = type;
 	}
 
 	public Long getId() {
@@ -100,16 +113,6 @@ public class Employee {
 		this.city = city;
 	}
 
-
-
-	public Teacher getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -130,7 +133,7 @@ public class Employee {
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", cpf=" + cpf + ", birthDate=" + birthDate + ", startDate="
-				+ startDate + ", phone=" + phone + ", city=" + city + ", teacher=" + teacher + "]";
+				+ startDate + ", phone=" + phone + ", city=" + city + "]";
 	}
 
 	

@@ -21,7 +21,6 @@ import com.schoolproject.schoolproject.repositories.ReportCardRepository;
 import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.repositories.SubjectRepository;
-import com.schoolproject.schoolproject.repositories.TeacherRepository;
 
 @Configuration
 @Profile("test")
@@ -33,8 +32,6 @@ public class TestConfig implements CommandLineRunner{
 	
 	@Autowired
 	private SubjectRepository subjectRepository;
-	@Autowired
-	private TeacherRepository teacherRepository;
 	
 	@Autowired
 	private ReportCardRepository reportCardRepository;
@@ -63,9 +60,9 @@ public class TestConfig implements CommandLineRunner{
 		ReportCard rp = new ReportCard(null, "901", student, s1, 3.4);
 		ReportCard rp1 = new ReportCard(null, "901", student, s2, 8.5);
 		
-		Employee employee = new Employee(null, "Maria Silva", 
+		Employee employee = new Teacher(null, "Maria Silva", 
 				"235500332", Instant.parse("2004-06-20T19:53:07Z"),
-				Instant.now(), "21992314045", "São Gonçalo");
+		Instant.now(), "21992314045", "São Gonçalo", "32424244", "T");
 		
 		studentRepository.saveAll(Arrays.asList(student,student1));
 		schoolClassRepository.saveAll(Arrays.asList(sc1));
@@ -76,10 +73,8 @@ public class TestConfig implements CommandLineRunner{
 		sc1.getStudents().add(student1);
 		sc1.getStudents().add(student);
 		
-		schoolClassRepository.saveAll(Arrays.asList(sc1));
-		Teacher teacher = new Teacher(null, "124353355", employee);
-		employee.setTeacher(teacher);
 		employeeRepository.saveAll(Arrays.asList(employee));
+		schoolClassRepository.saveAll(Arrays.asList(sc1));
 
 	}
 	

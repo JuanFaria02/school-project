@@ -35,8 +35,7 @@ public class SchoolClass implements Serializable{
 	@JoinTable(name = "tb_classes_students", joinColumns = @JoinColumn(name = "id_class"),
 	inverseJoinColumns = @JoinColumn(name = "id_student"))
 	private Set<Student> students = new HashSet<>();
-	
-	
+
 
 	public SchoolClass() {
 	}
@@ -91,6 +90,9 @@ public class SchoolClass implements Serializable{
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
+
+
+
 
 
 
