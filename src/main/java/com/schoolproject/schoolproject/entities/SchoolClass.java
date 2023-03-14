@@ -36,6 +36,10 @@ public class SchoolClass implements Serializable{
 	inverseJoinColumns = @JoinColumn(name = "id_student"))
 	private Set<Student> students = new HashSet<>();
 
+	@ManyToMany
+	@JoinTable(name = "tb_classes_teachers", joinColumns = @JoinColumn(name = "id_class"),
+	inverseJoinColumns = @JoinColumn(name = "id_teacher"))
+	private Set<Teacher> teachers = new HashSet<>();
 
 	public SchoolClass() {
 	}
@@ -93,6 +97,24 @@ public class SchoolClass implements Serializable{
 
 
 
+
+
+
+	public Set<Teacher> getTeachers() {
+		return teachers;
+	}
+
+
+
+	public void setTeachers(Set<Teacher> teachers) {
+		this.teachers = teachers;
+	}
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 
 

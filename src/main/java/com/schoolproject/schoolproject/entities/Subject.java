@@ -29,6 +29,9 @@ public class Subject implements Serializable{
 	@JsonIgnore
 	private Set<ReportCard> reportCards = new HashSet<>();
 	
+	@OneToMany(mappedBy = "subject")
+	@JsonIgnore
+	private Set<Teacher> teachers = new HashSet<>();
 	
 	public Subject() {
 	}

@@ -22,6 +22,8 @@ import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.repositories.SubjectRepository;
 
+import jakarta.persistence.Table;
+
 @Configuration
 @Profile("test")
 public class TestConfig implements CommandLineRunner{
@@ -60,9 +62,9 @@ public class TestConfig implements CommandLineRunner{
 		ReportCard rp = new ReportCard(null, "901", student, s1, 3.4);
 		ReportCard rp1 = new ReportCard(null, "901", student, s2, 8.5);
 		
-		Employee employee = new Teacher(null, "Maria Silva", 
+		Teacher employee = new Teacher(null, "Maria Silva", 
 				"235500332", Instant.parse("2004-06-20T19:53:07Z"),
-		Instant.now(), "21992314045", "São Gonçalo", "32424244", "T");
+		Instant.now(), "21992314045", "São Gonçalo", "32424244", s1,"T");
 		
 		studentRepository.saveAll(Arrays.asList(student,student1));
 		schoolClassRepository.saveAll(Arrays.asList(sc1));
@@ -74,6 +76,7 @@ public class TestConfig implements CommandLineRunner{
 		sc1.getStudents().add(student);
 		
 		employeeRepository.saveAll(Arrays.asList(employee));
+		sc1.getTeachers().add(employee);
 		schoolClassRepository.saveAll(Arrays.asList(sc1));
 
 	}
