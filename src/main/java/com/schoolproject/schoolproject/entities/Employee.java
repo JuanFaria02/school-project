@@ -15,6 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -42,11 +44,13 @@ public class Employee {
 	@Column(insertable=false, updatable=false)
 	private String type;
     
-    
+	@ManyToOne
+	@JoinColumn(name = "id_position_company")
+    private PositionCompany positionCompany;
     
 	public Employee() {
 	}
-	public Employee(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city, String type) {
+	public Employee(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city, PositionCompany positionCompany, String type) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
@@ -54,6 +58,7 @@ public class Employee {
 		this.startDate = startDate;
 		this.phone = phone;
 		this.city = city;
+		this.positionCompany = positionCompany;
 		this.type = type;
 	}
 
@@ -113,6 +118,12 @@ public class Employee {
 		this.city = city;
 	}
 
+	public PositionCompany getPositionCompany() {
+		return positionCompany;
+	}
+	public void setPositionCompany(PositionCompany positionCompany) {
+		this.positionCompany = positionCompany;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

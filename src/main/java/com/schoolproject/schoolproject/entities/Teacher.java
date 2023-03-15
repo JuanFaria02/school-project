@@ -36,8 +36,8 @@ public class Teacher extends Employee{
 	public Teacher() {
 	}
 
-	public Teacher(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city, String siape, Subject subject, String type) {
-		super(id, name, cpf, birthDate, startDate, phone, city, type);
+	public Teacher(Long id, String name, String cpf, Instant birthDate, Instant startDate, String phone, String city, PositionCompany positionCompany, String siape, Subject subject, String type) {
+		super(id, name, cpf, birthDate, startDate, phone, city, positionCompany, type);
 
 		this.siape = siape;
 		this.subject = subject;
