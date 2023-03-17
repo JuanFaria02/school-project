@@ -21,4 +21,29 @@ public class StudentService {
 		Optional<Student> obj = studentRepository.findById(id);
 		return obj.get();
 	}
+	
+	public Student insert(Student student) {
+		return studentRepository.save(student);
+	}
+	
+	public void deleteById(Long id) {
+		studentRepository.deleteById(id);
+	}
+	
+	public Student update(Long id, Student student) {
+		Student entity = studentRepository.getReferenceById(id);
+		updateData(entity, student);
+		return studentRepository.save(entity);
+	}
+	
+	private void updateData(Student entity, Student student) {
+		entity.setName(student.getName());
+		entity.setCpf(student.getCpf());
+		entity.setCity(student.getCity());
+		entity.setPhone(student.getPhone());
+		entity.setBirthDate(student.getBirthDate());
+		entity.setStartDate(student.getStartDate());
+
+	}
+
 }

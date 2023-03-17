@@ -47,9 +47,9 @@ public class TestConfig implements CommandLineRunner{
 	public void run(String... args){
 
 
-
+		
 		Student student = new Student(null, "Maria Silva",
-				"235500332", Instant.parse("2004-06-20T19:53:07Z"),
+				"235500332", Instant.now(),
 				Instant.now(), "21992314045", "São Gonçalo");
 		
 		
