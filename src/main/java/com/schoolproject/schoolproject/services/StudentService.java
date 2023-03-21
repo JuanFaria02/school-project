@@ -1,5 +1,6 @@
 package com.schoolproject.schoolproject.services;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.schoolproject.schoolproject.entities.Student;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
+import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class StudentService {
@@ -19,11 +21,11 @@ public class StudentService {
 	
 	public Student findById(Long id) {
 		Optional<Student> obj = studentRepository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(()->new ResourceNotFoundException(id));
 	}
 	
 	public Student insert(Student student) {
-		return studentRepository.save(student);
+		return studentRepository.save(student);	
 	}
 	
 	public void deleteById(Long id) {
@@ -45,5 +47,5 @@ public class StudentService {
 		entity.setStartDate(student.getStartDate());
 
 	}
-
+	
 }
