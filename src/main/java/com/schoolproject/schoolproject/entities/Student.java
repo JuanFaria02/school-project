@@ -2,25 +2,24 @@ package com.schoolproject.schoolproject.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -140,10 +139,47 @@ public class Student implements Serializable{
 		this.schoolClasses = schoolClasses;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+	public void isValidForms(){
+		if (name == null || cpf == null || birthDate == null || startDate == null || phone == null || city == null) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Forms Null!");
+		}
 	}
 
+	public void isValidCpf() {
+		
+		
+		List<Integer> cpfList = Arrays.asList(cpf.split(""))
+				.stream()
+				.map(n -> Integer.valueOf(n))
+				.toList();
+
+
+		int firstDigit = getDigit(cpfList, 10, 2);;
+		int secondDigit = getDigit(cpfList, 11, 1);
+
+        if (!(firstDigit == cpfList.get(cpfList.size()-2) && secondDigit == cpfList.get(cpfList.size()-1))) {
+    	    throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Cpf Invalid!");
+        }
+	       
+	}
+
+
+	private Integer getDigit(List<Integer> cpf, Integer temp, Integer sizeCutCpf) {
+        Integer sumDigit = 0;
+        for (int i = 0; i < cpf.size()-sizeCutCpf; i++) {
+            sumDigit += cpf.get(i) * temp;
+            temp--;
+        }
+        int digit = (sumDigit * 10) % 11;
+
+        if (digit == 10) {
+            digit = 0;
+        }
+        return digit;
+    }
+
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

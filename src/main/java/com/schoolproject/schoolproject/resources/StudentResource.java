@@ -42,10 +42,13 @@ public class StudentResource {
 	
 	@PostMapping
 	public ResponseEntity<Student> insert(@RequestBody Student student){
+		
+		
 		student = studentService.insert(student);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(student.getId()).toUri();
 		return ResponseEntity.created(uri).body(student);
+		
 	}
 	
 	@DeleteMapping(value = "/{id}")

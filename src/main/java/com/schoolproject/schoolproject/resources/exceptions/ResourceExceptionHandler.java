@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 
+import com.schoolproject.schoolproject.services.exceptions.CpfInvalidException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,9 +21,25 @@ public class ResourceExceptionHandler {
 			HttpServletRequest request){
 		String error = "Resource not found";
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		StandardError err = new StandardError(Instant.now(), status.value(), e.getMessage(), error, request.getRequestURI());
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
-
+	
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<StandardError> httpClientError(HttpClientErrorException e, HttpServletRequest request){
+		String error = "Bad Request";
+		StandardError err = new StandardError(Instant.now(), e.getStatusCode().value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(e.getStatusCode().value()).body(err);
+		
+	}
+	
+	@ExceptionHandler(CpfInvalidException.class)
+	public ResponseEntity<StandardError> cpfInvalidException(CpfInvalidException e, HttpServletRequest request){
+		String error = "Unprocessable Entity";
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status.value()).body(err);
+		
+	}
 }
 
