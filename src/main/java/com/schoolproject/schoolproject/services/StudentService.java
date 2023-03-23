@@ -3,7 +3,10 @@ package com.schoolproject.schoolproject.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -11,7 +14,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.schoolproject.schoolproject.entities.Student;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.services.exceptions.CpfInvalidException;
+import com.schoolproject.schoolproject.services.exceptions.DatabaseException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class StudentService {
@@ -50,14 +56,44 @@ public class StudentService {
 	
 	}
 	
-	public void deleteById(Long id) {
-		studentRepository.deleteById(id);
+	public void deleteById(Long id) { 
+		try {
+			findById(id);
+			studentRepository.deleteById(id);
+		}
+		catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 	
 	public Student update(Long id, Student student) {
 		Student entity = studentRepository.getReferenceById(id);
-		updateData(entity, student);
-		return studentRepository.save(entity);
+		try {
+			student.isValidForms();
+			student.isValidCpf();
+			updateData(entity, student);
+			return studentRepository.save(entity);
+		}
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		catch (NumberFormatException e) {
+			throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
+		}
+		catch (HttpClientErrorException e) {
+			if(e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+				throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
+
+			}
+			else {
+				throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
+
+			}
+		}
 	}
 	
 	private void updateData(Student entity, Student student) {
@@ -71,3 +107,4 @@ public class StudentService {
 	}
 	
 }
+	

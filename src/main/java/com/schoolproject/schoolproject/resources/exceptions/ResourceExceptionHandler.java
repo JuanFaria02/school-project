@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.schoolproject.schoolproject.services.exceptions.CpfInvalidException;
+import com.schoolproject.schoolproject.services.exceptions.DatabaseException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +41,15 @@ public class ResourceExceptionHandler {
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status.value()).body(err);
 		
+	}
+	
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<StandardError> databaseException(DatabaseException e, 
+			HttpServletRequest request){
+		String error = "Database Error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
 	}
 }
 
