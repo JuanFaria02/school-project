@@ -140,12 +140,6 @@ public class Student implements Serializable{
 	}
 
 
-	public void isValidForms(){
-		if (name == null || cpf == null || birthDate == null || startDate == null || phone == null || city == null) {
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Forms Null!");
-		}
-	}
-
 	public void isValidCpf() {
 		
 		

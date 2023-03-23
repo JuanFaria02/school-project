@@ -1,9 +1,9 @@
 package com.schoolproject.schoolproject.services;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,26 +33,10 @@ public class StudentService {
 	}
 	
 	public Student insert(Student student) {
-		
-		try {
-			student.isValidForms();
-			student.isValidCpf();
-			return studentRepository.save(student);
+		isValidForms(student);		
+		isValidCpf(student.getCpf());
+		return studentRepository.save(student);
 			
-		}
-		catch (NumberFormatException e) {
-			throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
-		}
-		catch (HttpClientErrorException e) {
-			if(e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-				throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
-
-			}
-			else {
-				throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
-
-			}
-		}
 	
 	}
 	
@@ -73,26 +57,13 @@ public class StudentService {
 	public Student update(Long id, Student student) {
 		Student entity = studentRepository.getReferenceById(id);
 		try {
-			student.isValidForms();
-			student.isValidCpf();
+			isValidForms(student);
+			isValidCpf(student.getCpf());
 			updateData(entity, student);
 			return studentRepository.save(entity);
 		}
 		catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
-		}
-		catch (NumberFormatException e) {
-			throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
-		}
-		catch (HttpClientErrorException e) {
-			if(e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-				throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
-
-			}
-			else {
-				throw new CpfInvalidException("Unprocessable Entity! Cpf Invalid!");
-
-			}
 		}
 	}
 	
@@ -103,8 +74,53 @@ public class StudentService {
 		entity.setPhone(student.getPhone());
 		entity.setBirthDate(student.getBirthDate());
 		entity.setStartDate(student.getStartDate());
-
 	}
+	
+	private void isValidForms(Student student){
+		if (student.getName() == null || student.getCpf() == null || student.getBirthDate() == null || student.getStartDate() == null || student.getPhone() == null || student.getCity() == null) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Forms Null!");
+		}
+	}
+	
+	private void isValidCpf(String cpf) {
+		try {
+			List<Integer> cpfList = Arrays.asList(cpf.split(""))
+				.stream()
+				.map(n -> Integer.valueOf(n))
+				.toList();
+		
+
+			int firstDigit = getDigit(cpfList, 10, 2);;
+			int secondDigit = getDigit(cpfList, 11, 1);
+
+			if (!(firstDigit == cpfList.get(cpfList.size()-2) && secondDigit == cpfList.get(cpfList.size()-1))) {
+    	    	throw new CpfInvalidException("Cpf Invalid!");
+			}
+		}
+		catch (NumberFormatException e) {
+			// TODO: handle exception
+	    	throw new CpfInvalidException("Cpf Invalid!");
+			
+		}
+	       
+	}
+
+
+	private Integer getDigit(List<Integer> cpf, Integer temp, Integer sizeCutCpf) {
+        Integer sumDigit = 0;
+        for (int i = 0; i < cpf.size()-sizeCutCpf; i++) {
+            sumDigit += cpf.get(i) * temp;
+            temp--;
+        }
+        int digit = (sumDigit * 10) % 11;
+
+        if (digit == 10) {
+            digit = 0;
+        }
+        return digit;
+    }
+
+	
 	
 }
 	

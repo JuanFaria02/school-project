@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -63,6 +64,7 @@ public class Subject implements Serializable{
 	public Set<ReportCard> getReportCards() {
 		return reportCards;
 	}
+	
 
 	@Override
 	public int hashCode() {
