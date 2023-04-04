@@ -66,9 +66,9 @@ public class SubjectService {
 		
 	}
 	
+	
 	private void updateData(Subject entity, Subject obj) {
 		entity.setName(obj.getName());
-		
 	}
 	
 	private void isValidForms(Subject obj) {

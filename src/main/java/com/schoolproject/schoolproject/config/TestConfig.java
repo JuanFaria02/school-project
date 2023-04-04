@@ -1,7 +1,6 @@
 package com.schoolproject.schoolproject.config;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -10,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.schoolproject.schoolproject.entities.Employee;
 import com.schoolproject.schoolproject.entities.PositionCompany;
 import com.schoolproject.schoolproject.entities.ReportCard;
 import com.schoolproject.schoolproject.entities.SchoolClass;
@@ -24,7 +22,6 @@ import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
 import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.repositories.SubjectRepository;
 
-import jakarta.persistence.Table;
 
 @Configuration
 @Profile("test")
@@ -56,8 +53,7 @@ public class TestConfig implements CommandLineRunner{
 		SchoolClass sc1 = new SchoolClass(null, "901", Instant.now());
 		Student student1 = new Student(null, "José Silva",
 				"235501332", Instant.parse("2004-06-20T19:53:07Z"),
-				Instant.now(), "21992314045", "São Gonçalo");
-		SchoolClass sc = new SchoolClass(null, "101", Instant.now());
+				Instant.parse("2004-06-20T19:53:07Z"), "21992314045", "São Gonçalo");
 
 		Subject s1 = new Subject(null, "Math");
 		Subject s2 = new Subject(null, "Phisics");

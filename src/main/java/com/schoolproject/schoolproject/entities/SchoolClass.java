@@ -15,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -103,14 +102,6 @@ public class SchoolClass implements Serializable{
 	public Set<Teacher> getTeachers() {
 		return teachers;
 	}
-
-
-
-	public void setTeachers(Set<Teacher> teachers) {
-		this.teachers = teachers;
-	}
-
-
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
