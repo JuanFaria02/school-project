@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.schoolproject.schoolproject.entities.SchoolClass;
-import com.schoolproject.schoolproject.entities.Student;
 import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
-import com.schoolproject.schoolproject.repositories.StudentRepository;
 import com.schoolproject.schoolproject.services.exceptions.DatabaseException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
 
@@ -24,10 +22,6 @@ import jakarta.persistence.EntityNotFoundException;
 public class SchoolClassService {
 	@Autowired
 	private SchoolClassRepository schoolClassRepository;
-	@Autowired
-	private StudentService studentService;
-	@Autowired
-	private StudentRepository studentRepository;
 	
 	public List<SchoolClass> findAll() {
 		return schoolClassRepository.findAll();
@@ -71,8 +65,7 @@ public class SchoolClassService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-	
-	
+
 	private void updateData(SchoolClass entity, SchoolClass obj) {
 		entity.setGrade(obj.getGrade());
 		entity.setMoment(obj.getMoment());

@@ -2,7 +2,6 @@ package com.schoolproject.schoolproject.resources;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.schoolproject.schoolproject.entities.SchoolClass;
-import com.schoolproject.schoolproject.entities.Student;
 import com.schoolproject.schoolproject.services.SchoolClassService;
 
 @RestController
@@ -27,8 +25,7 @@ import com.schoolproject.schoolproject.services.SchoolClassService;
 public class SchoolClassResource {
 	@Autowired
 	private SchoolClassService schoolClassService;
-	@Autowired
-	private StudentResource studentResource;
+
 	@GetMapping
 	public ResponseEntity<List<SchoolClass>> findAll() {
 		List<SchoolClass> schoolClasses = schoolClassService.findAll();
@@ -60,6 +57,6 @@ public class SchoolClassResource {
 		schoolClass = schoolClassService.update(id, schoolClass);
 		return ResponseEntity.ok().body(schoolClass);
 	}
-	
+
 }
 
