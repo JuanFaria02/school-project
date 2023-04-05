@@ -48,6 +48,7 @@ public class Student implements Serializable{
 	private Set<SchoolClass> schoolClasses = new HashSet<>();
 	
 	@OneToMany(mappedBy = "student")
+	@JsonIgnore
 	private Set<ReportCard> reportCards = new HashSet<>();
 	
 	

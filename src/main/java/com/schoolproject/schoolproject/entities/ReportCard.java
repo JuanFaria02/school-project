@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +33,6 @@ public class ReportCard implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "id_student")
-	@JsonIgnore
 	private Student student;
 	
 	public ReportCard() {

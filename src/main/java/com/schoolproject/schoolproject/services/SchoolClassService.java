@@ -59,7 +59,6 @@ public class SchoolClassService {
 		SchoolClass entity = schoolClassRepository.getReferenceById(id);
 		try {
 			isValidForms(obj);
-			//obj.getStudents().add(studentService.findById(3l));
 			updateData(entity, obj);
 			return schoolClassRepository.save(entity);
 		}
@@ -73,7 +72,7 @@ public class SchoolClassService {
 		try {
 			entity.getStudents().add(studentService.findById(idStudent));
 			return schoolClassRepository.save(entity);
-		}
+		} 
 		catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
