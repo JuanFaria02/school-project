@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "tb_employee", uniqueConstraints = {@UniqueConstraint(columnNames = {"cpf", "siape"})})
+@Table(name = "tb_employee", uniqueConstraints = {@UniqueConstraint(columnNames = {"cpf"})})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("E")
@@ -32,8 +32,7 @@ public class Employee {
 	
 	private String name; 
 	private String cpf;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT")	
 	private Instant birthDate;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT")
@@ -123,6 +122,14 @@ public class Employee {
 	}
 	public void setPositionCompany(PositionCompany positionCompany) {
 		this.positionCompany = positionCompany;
+	}
+	
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	@Override
 	public int hashCode() {

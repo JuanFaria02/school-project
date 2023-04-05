@@ -30,7 +30,7 @@ public class ReportCardService {
 	
 	public ReportCard findById(Long id) {
 		Optional<ReportCard> obj = reportCardRepository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(()->new ResourceNotFoundException(id));
 	}
 	
 	public ReportCard insert(ReportCard obj) {

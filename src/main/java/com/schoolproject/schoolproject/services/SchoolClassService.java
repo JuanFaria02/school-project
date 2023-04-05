@@ -30,7 +30,7 @@ public class SchoolClassService {
 	
 	public SchoolClass findById(Long id) {
 		Optional<SchoolClass> obj = schoolClassRepository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(()->new ResourceNotFoundException(id));
 	}
 	public SchoolClass insert(SchoolClass obj) {
 		isValidForms(obj);
@@ -77,6 +77,7 @@ public class SchoolClassService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
+	//TODO insertTeacher
 	
 	private void updateData(SchoolClass entity, SchoolClass obj) {
 		entity.setGrade(obj.getGrade());

@@ -68,7 +68,7 @@ public class TestConfig implements CommandLineRunner{
 		PositionCompany positionCompany = new PositionCompany(null, "Teacher", 3000.0);
 		Teacher employee = new Teacher(null, "Maria Silva", 
 				"235500332", Instant.parse("2004-06-20T19:53:07Z"),
-		Instant.now(), "21992314045", "São Gonçalo", positionCompany, "32424244", s1,"T");
+		Instant.now(), "21992314045", "São Gonçalo", positionCompany, s1,"T");
 		
 		
 		studentRepository.saveAll(Arrays.asList(student,student1, student2));

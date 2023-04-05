@@ -2,58 +2,35 @@ package com.schoolproject.schoolproject.services;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.schoolproject.schoolproject.entities.Employee;
+import com.schoolproject.schoolproject.entities.Teacher;
 import com.schoolproject.schoolproject.repositories.EmployeeRepository;
 import com.schoolproject.schoolproject.services.exceptions.CpfInvalidException;
-import com.schoolproject.schoolproject.services.exceptions.DatabaseException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class EmployeeService {
+public class TeacherService extends EmployeeService{
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	public List<Employee> findAll(){
-		return employeeRepository.findAll();
-	}
-	
-	public Employee findById(Long id) {
-		Optional<Employee> obj = employeeRepository.findById(id);
-		return obj.orElseThrow(()->new ResourceNotFoundException(id));
-	}
-	
-	public Employee insert(Employee employee) {
+
+	public Teacher insert(Teacher employee) {
 		isValidForms(employee);
 		isValidCpf(employee.getCpf());
 		return employeeRepository.save(employee);
 	}
 
-	
-	public void deleteById(Long id) { 
-		try {
-			findById(id);
-			employeeRepository.deleteById(id);
-		}
-		catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException(id);
-		}
-		catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-	}
 
-	public Employee update(Long id, Employee employee) {
-		Employee entity = employeeRepository.getReferenceById(id);
+	public Employee update(Long id, Teacher employee) {
+		Teacher entity = (Teacher) employeeRepository.getReferenceById(id);
 		try {
 			isValidForms(employee);
 			isValidCpf(employee.getCpf());
@@ -65,17 +42,18 @@ public class EmployeeService {
 		}
 	}
 	
-	private void updateData(Employee entity, Employee employee) {
+	private void updateData(Teacher entity, Teacher employee) {
 		entity.setName(employee.getName());
 		entity.setCpf(employee.getCpf());
 		entity.setCity(employee.getCity());
 		entity.setPhone(employee.getPhone());
 		entity.setBirthDate(employee.getBirthDate());
 		entity.setStartDate(employee.getStartDate());
+		entity.setSubject(employee.getSubject());
 	}
 
 	
-	private void isValidForms(Employee obj) {
+	private void isValidForms(Teacher obj) {
 		if (obj.getName() == null || 
 				obj.getCpf() == null || 
 				obj.getBirthDate() == null ||
@@ -83,7 +61,8 @@ public class EmployeeService {
 				obj.getPhone() == null || 
 				obj.getCity() == null ||
 				obj.getPositionCompany() == null ||
-				obj.getType() == null) {
+				obj.getType() == null ||
+				obj.getSubject() == null) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Forms Null!");
 		}
 	}
@@ -124,5 +103,4 @@ public class EmployeeService {
         }
         return digit;
     }
-	
 }
