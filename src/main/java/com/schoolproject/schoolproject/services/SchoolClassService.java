@@ -22,7 +22,8 @@ import jakarta.persistence.EntityNotFoundException;
 public class SchoolClassService {
 	@Autowired
 	private SchoolClassRepository schoolClassRepository;
-	
+	@Autowired
+	private StudentService studentService;
 	public List<SchoolClass> findAll() {
 		return schoolClassRepository.findAll();
 	}
@@ -58,6 +59,7 @@ public class SchoolClassService {
 		SchoolClass entity = schoolClassRepository.getReferenceById(id);
 		try {
 			isValidForms(obj);
+			//obj.getStudents().add(studentService.findById(3l));
 			updateData(entity, obj);
 			return schoolClassRepository.save(entity);
 		}
@@ -66,6 +68,17 @@ public class SchoolClassService {
 		}
 	}
 
+	public SchoolClass insertStudent(Long id, Long idStudent) {
+		SchoolClass entity = schoolClassRepository.getReferenceById(id);
+		try {
+			entity.getStudents().add(studentService.findById(idStudent));
+			return schoolClassRepository.save(entity);
+		}
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+	}
+	
 	private void updateData(SchoolClass entity, SchoolClass obj) {
 		entity.setGrade(obj.getGrade());
 		entity.setMoment(obj.getMoment());
@@ -74,7 +87,7 @@ public class SchoolClassService {
 	}
 	
 	private void isValidForms(SchoolClass obj) {
-		if(obj.getGrade() == null || obj.getMoment()==null) {
+		if(obj.getGrade() == null || obj.getMoment()== null) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Values null!");
 		}
 	}

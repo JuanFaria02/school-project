@@ -54,7 +54,9 @@ public class TestConfig implements CommandLineRunner{
 		Student student1 = new Student(null, "José Silva",
 				"235501332", Instant.parse("2004-06-20T19:53:07Z"),
 				Instant.parse("2004-06-20T19:53:07Z"), "21992314045", "São Gonçalo");
-
+		Student student2 = new Student(null, "José Silva",
+				"3244444211", Instant.parse("2004-06-20T19:53:07Z"),
+				Instant.parse("2004-06-20T19:53:07Z"), "21992314045", "São Gonçalo");
 		Subject s1 = new Subject(null, "Math");
 		Subject s2 = new Subject(null, "Phisics");
 
@@ -69,7 +71,7 @@ public class TestConfig implements CommandLineRunner{
 		Instant.now(), "21992314045", "São Gonçalo", positionCompany, "32424244", s1,"T");
 		
 		
-		studentRepository.saveAll(Arrays.asList(student,student1));
+		studentRepository.saveAll(Arrays.asList(student,student1, student2));
 		schoolClassRepository.saveAll(Arrays.asList(sc1));
 		subjectRepository.saveAll(Arrays.asList(s1,s2));
 		positionCompanyRepository.saveAll(Arrays.asList(positionCompany));
