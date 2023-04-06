@@ -63,5 +63,11 @@ public class SchoolClassResource {
 		SchoolClass schoolClass = schoolClassService.insertStudent(id, idStudent);
 		return ResponseEntity.ok().body(schoolClass);
 	}
+	
+	@PutMapping(value = "/{id}/teachers/{idTeacher}")
+	public ResponseEntity<SchoolClass> insertTeacher(@PathVariable Long id, @PathVariable Long idTeacher){
+		SchoolClass schoolClass = schoolClassService.insertTeacher(id, idTeacher);
+		return ResponseEntity.ok().body(schoolClass);
+	}
 }
 

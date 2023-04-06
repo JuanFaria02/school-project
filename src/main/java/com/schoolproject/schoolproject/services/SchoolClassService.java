@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.schoolproject.schoolproject.entities.SchoolClass;
+import com.schoolproject.schoolproject.entities.Teacher;
 import com.schoolproject.schoolproject.repositories.SchoolClassRepository;
 import com.schoolproject.schoolproject.services.exceptions.DatabaseException;
 import com.schoolproject.schoolproject.services.exceptions.ResourceNotFoundException;
@@ -24,6 +25,8 @@ public class SchoolClassService {
 	private SchoolClassRepository schoolClassRepository;
 	@Autowired
 	private StudentService studentService;
+	@Autowired
+	private TeacherService teacherService;
 	public List<SchoolClass> findAll() {
 		return schoolClassRepository.findAll();
 	}
@@ -77,8 +80,25 @@ public class SchoolClassService {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-	//TODO insertTeacher
+
+	public SchoolClass insertTeacher(Long id, Long idTeacher) {
+		SchoolClass entity = schoolClassRepository.getReferenceById(id);
+		try {
+			isTeacher(idTeacher);
+			entity.getTeachers().add((Teacher)teacherService.findById(idTeacher));
+			return schoolClassRepository.save(entity);
+		} 
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+	}
 	
+	private void isTeacher(Long id) {
+		if(!teacherService.findById(id).getType().equals("T")) {
+			throw new ResourceNotFoundException(id);
+		}
+
+	}
 	private void updateData(SchoolClass entity, SchoolClass obj) {
 		entity.setGrade(obj.getGrade());
 		entity.setMoment(obj.getMoment());
